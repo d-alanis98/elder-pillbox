@@ -14,22 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 //Base app
 const App_1 = __importDefault(require("../App"));
-const PillBoxLeds_1 = __importDefault(require("../../application/Shared/infrastructure/GPiO/components/PillBoxLeds"));
+const PillBoxScheduler_1 = __importDefault(require("../../application/PillBox/application/PillBoxScheduler"));
 class PillBoxApp extends App_1.default {
     constructor() {
         super(PillBoxApp.name);
         this.start = () => __awaiter(this, void 0, void 0, function* () {
             try {
                 //We execute the main location interval use case, to update the location every X seconds (60 by default)
-                let sectionCounter = 1;
-                const pillBoxLeds = new PillBoxLeds_1.default();
-                setInterval(() => {
-                    pillBoxLeds.turnAllOf();
-                    pillBoxLeds.turnOnSection(sectionCounter);
-                    (sectionCounter === 14)
-                        ? sectionCounter = 1
-                        : sectionCounter++;
-                }, 1000);
+                new PillBoxScheduler_1.default().run();
             }
             catch (error) {
                 this.logger.error(error.message);
