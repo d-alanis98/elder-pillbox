@@ -37,18 +37,18 @@ export default class PillBoxScheduler {
     private activateSectionIfHourIsPast = () => {
         const { firstSectionDate, secondSectionDate } = this.getDatesFromCurrentSections();
         const currentDate = new Date().getTime();
-        console.log({ firstSectionDate, secondSectionDate, currentDate })
         //We get the section keys
         const firstSectionKey: ValidSections =  (2 * DateHelper.getCurrentDayOfTheWeek() as ValidSections);
         const secondSectionKey: ValidSections = (firstSectionKey + 1 as ValidSections);
         //Si aun no se cumple la fecha de la primera seccion
-        if(firstSectionDate > currentDate)
+        if(currentDate < firstSectionDate)
             return;
-        if(firstSectionDate <= currentDate && secondSectionDate > currentDate) {
+        //First section turns on
+        if(currentDate >= firstSectionDate && currentDate < secondSectionDate) {
             this.pillBoxLeds.turnAllOf();
             this.pillBoxLeds.turnOnSection(firstSectionKey);        
         }
-        if(firstSectionDate < currentDate && secondSectionDate <= currentDate) {
+        if(currentDate >= secondSectionDate) {
             this.pillBoxLeds.turnAllOf();
             this.pillBoxLeds.turnOnSection(secondSectionKey);
         }
