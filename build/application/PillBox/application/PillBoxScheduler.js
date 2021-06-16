@@ -9,7 +9,7 @@ class PillBoxScheduler {
     constructor() {
         this.run = () => {
             node_cron_1.schedule('* * * * * ', () => {
-                const dateToCompare = '2021-06-15T01:10:00';
+                const dateToCompare = '2021-06-16T01:24:00';
                 if (this.dateIsInThePast(dateToCompare))
                     console.log('Date has passed');
                 else
