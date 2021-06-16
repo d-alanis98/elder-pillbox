@@ -17,7 +17,7 @@ class PillBoxScheduler {
             });
         };
         this.dateIsInThePast = (dateISOString) => {
-            return moment_1.default(dateISOString).isAfter(new Date().toISOString());
+            return moment_1.default(new Date().toISOString()).isAfter(dateISOString);
         };
     }
 }

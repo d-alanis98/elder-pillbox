@@ -14,6 +14,7 @@ export default class PillBoxScheduler {
     }
 
     private dateIsInThePast = (dateISOString: string) => {
-        return moment(dateISOString).isAfter(new Date().toISOString());
+
+        return moment(new Date().toISOString()).isAfter(dateISOString);
     }
 }
