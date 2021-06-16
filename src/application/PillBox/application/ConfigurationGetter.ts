@@ -19,7 +19,6 @@ export default class ConfigurationGetter {
         try {
             const response = await AxiosRequest.get('/iot/device');
             const deviceData = response?.data;
-            console.log(deviceData)
             if(deviceData?.configuration)
                 this.configuration = new PillBoxConfiguration(deviceData.configuration);
             return this.configuration;

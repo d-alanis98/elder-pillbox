@@ -17,6 +17,7 @@ const DateHelper_1 = __importDefault(require("../../Shared/infrastructure/Date/D
 const PillBox_1 = __importDefault(require("../domain/PillBox"));
 const ConfigurationGetter_1 = require("./ConfigurationGetter");
 const ConfigurationGetter_2 = __importDefault(require("./ConfigurationGetter"));
+const IoTDeviceDataAPI_1 = __importDefault(require("../../Shared/infrastructure/Requests/IoTDeviceDataAPI"));
 class PillBoxScheduler {
     constructor(logger, pillBoxLeds) {
         this.run = () => __awaiter(this, void 0, void 0, function* () {
@@ -52,15 +53,27 @@ class PillBoxScheduler {
                 console.log('Turning on first section');
                 this.pillBoxLeds.turnAllOf();
                 this.pillBoxLeds.turnOnSection(firstSectionKey);
+                this.currentSectionActive = firstSectionKey;
+                this.updateActiveKeyAndEmmitEvent(firstSectionKey);
             }
             if (currentDate >= secondSectionDate) {
                 console.log('Turning on second section');
                 this.pillBoxLeds.turnAllOf();
                 this.pillBoxLeds.turnOnSection(secondSectionKey);
+                this.updateActiveKeyAndEmmitEvent(secondSectionKey);
             }
         };
+        this.updateActiveKeyAndEmmitEvent = (activeKey) => __awaiter(this, void 0, void 0, function* () {
+            if (activeKey !== this.currentSectionActive)
+                yield new IoTDeviceDataAPI_1.default(this.logger).postData('CurrentDosis', {
+                    section: activeKey,
+                    schedule: this.pillBoxConfiguration
+                });
+            this.currentSectionActive = activeKey;
+        });
         this.logger = logger;
         this.pillBoxLeds = pillBoxLeds;
+        this.currentSectionActive = -1;
         this.pillBoxConfiguration = new PillBox_1.default(ConfigurationGetter_1.defaultConfiguration);
     }
 }

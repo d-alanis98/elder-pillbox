@@ -21,7 +21,6 @@ class ConfigurationGetter {
             try {
                 const response = yield AxiosRequest_1.default.get('/iot/device');
                 const deviceData = response === null || response === void 0 ? void 0 : response.data;
-                console.log(deviceData);
                 if (deviceData === null || deviceData === void 0 ? void 0 : deviceData.configuration)
                     this.configuration = new PillBox_1.default(deviceData.configuration);
                 return this.configuration;

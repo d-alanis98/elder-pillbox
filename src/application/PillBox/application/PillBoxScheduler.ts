@@ -6,9 +6,10 @@ import PillBoxConfiguration from '../domain/PillBox';
 import { defaultConfiguration } from './ConfigurationGetter';
 import ConfigurationGetter from './ConfigurationGetter';
 import Logger from '../../Shared/domain/Logger/Logger';
-
+import IoTDeviceDataAPI from '../../Shared/infrastructure/Requests/IoTDeviceDataAPI';
 export default class PillBoxScheduler {
     private readonly logger: Logger;
+    private currentSectionActive: number;
     private readonly pillBoxLeds: PillBoxLeds;
     private pillBoxConfiguration: PillBoxConfiguration;
 
@@ -18,6 +19,7 @@ export default class PillBoxScheduler {
     ) {
         this.logger = logger;
         this.pillBoxLeds = pillBoxLeds;
+        this.currentSectionActive = -1;
         this.pillBoxConfiguration = new PillBoxConfiguration(defaultConfiguration);
     }
 
@@ -58,13 +60,28 @@ export default class PillBoxScheduler {
         if(currentDate >= firstSectionDate && currentDate < secondSectionDate) {
             console.log('Turning on first section');
             this.pillBoxLeds.turnAllOf();
-            this.pillBoxLeds.turnOnSection(firstSectionKey);        
+            this.pillBoxLeds.turnOnSection(firstSectionKey);
+            this.currentSectionActive = firstSectionKey;
+            this.updateActiveKeyAndEmmitEvent(firstSectionKey);       
         }
         if(currentDate >= secondSectionDate) {
             console.log('Turning on second section');
             this.pillBoxLeds.turnAllOf();
             this.pillBoxLeds.turnOnSection(secondSectionKey);
+            this.updateActiveKeyAndEmmitEvent(secondSectionKey);
         }
+    }
+
+    private updateActiveKeyAndEmmitEvent = async (activeKey: ValidSections) => {
+        if(activeKey !== this.currentSectionActive)
+            await new IoTDeviceDataAPI(this.logger).postData(
+                'CurrentDosis',
+                {
+                    section: activeKey,
+                    schedule: this.pillBoxConfiguration
+                }
+            )
+        this.currentSectionActive = activeKey;
     }
 }
 
