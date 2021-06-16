@@ -29,7 +29,7 @@ class PillBoxApp extends App_1.default {
                     (sectionCounter === 14)
                         ? sectionCounter = 1
                         : sectionCounter++;
-                });
+                }, 1000);
             }
             catch (error) {
                 this.logger.error(error.message);
