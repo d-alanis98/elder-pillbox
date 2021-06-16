@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //Base app
 const App_1 = __importDefault(require("../App"));
 const PillBoxLeds_1 = __importDefault(require("../../application/Shared/infrastructure/GPiO/components/PillBoxLeds"));
-const PillBox_1 = __importDefault(require("../../application/PillBox/domain/PillBox"));
 const PillBoxScheduler_1 = __importDefault(require("../../application/PillBox/application/PillBoxScheduler"));
 class PillBoxApp extends App_1.default {
     constructor() {
@@ -25,7 +24,7 @@ class PillBoxApp extends App_1.default {
                 const pillBoxLeds = new PillBoxLeds_1.default();
                 pillBoxLeds.turnAllOf();
                 //We execute the main location interval use case, to update the location every X seconds (60 by default)
-                new PillBoxScheduler_1.default(pillBoxLeds, new PillBox_1.default(mockData)).run();
+                new PillBoxScheduler_1.default(this.logger, pillBoxLeds).run();
             }
             catch (error) {
                 this.logger.error(error.message);
@@ -35,12 +34,3 @@ class PillBoxApp extends App_1.default {
     }
 }
 exports.default = PillBoxApp;
-const mockData = {
-    0: '08:30', 1: '18:30',
-    2: '08:30', 3: '18:30',
-    4: '09:30', 5: '22:26',
-    6: '08:30', 7: '18:30',
-    8: '08:30', 9: '18:30',
-    10: '08:30', 11: '18:30',
-    12: '08:30', 13: '18:30',
-};
