@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 //Base app
 const App_1 = __importDefault(require("../App"));
-const PushButton_1 = __importDefault(require("../../application/Shared/infrastructure/GPiO/components/PushButton"));
 const PillBoxLeds_1 = __importDefault(require("../../application/Shared/infrastructure/GPiO/components/PillBoxLeds"));
 const PillBox_1 = __importDefault(require("../../application/PillBox/domain/PillBox"));
 const PillBoxScheduler_1 = __importDefault(require("../../application/PillBox/application/PillBoxScheduler"));
@@ -27,7 +26,6 @@ class PillBoxApp extends App_1.default {
                 pillBoxLeds.turnAllOf();
                 //We execute the main location interval use case, to update the location every X seconds (60 by default)
                 new PillBoxScheduler_1.default(pillBoxLeds, new PillBox_1.default(mockData)).run();
-                new PushButton_1.default(6).onPress(() => pillBoxLeds.turnAllOf());
             }
             catch (error) {
                 this.logger.error(error.message);
