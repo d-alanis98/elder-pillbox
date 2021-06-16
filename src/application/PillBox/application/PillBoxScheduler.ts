@@ -28,15 +28,16 @@ export default class PillBoxScheduler {
     private getDatesFromCurrentSections = () => {
         const [firstSectionHour, secondSectionHour] = this.pillBoxConfiguration.getCurrentSections();
         //We get the dates
-        const firstSectionDate = DateHelper.getCurrentDateWithTimeFromString(firstSectionHour);
-        const secondSectionDate = DateHelper.getCurrentDateWithTimeFromString(secondSectionHour);
+        const firstSectionDate = DateHelper.getCurrentDateWithTimeFromString(firstSectionHour).getTime();
+        const secondSectionDate = DateHelper.getCurrentDateWithTimeFromString(secondSectionHour).getTime();
         //We log the value
         return { firstSectionDate, secondSectionDate };
     }
 
     private activateSectionIfHourIsPast = () => {
         const { firstSectionDate, secondSectionDate } = this.getDatesFromCurrentSections();
-        const currentDate = new Date();
+        const currentDate = new Date().getTime();
+        console.log({ firstSectionDate, secondSectionDate, currentDate })
         //We get the section keys
         const firstSectionKey: ValidSections =  (2 * DateHelper.getCurrentDayOfTheWeek() as ValidSections);
         const secondSectionKey: ValidSections = (firstSectionKey + 1 as ValidSections);
