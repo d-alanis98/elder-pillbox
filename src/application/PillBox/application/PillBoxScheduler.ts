@@ -38,7 +38,7 @@ export default class PillBoxScheduler {
         const { firstSectionDate, secondSectionDate } = this.getDatesFromCurrentSections();
         const currentDate = new Date().getTime();
         //We get the section keys
-        const firstSectionKey: ValidSections =  (2 * DateHelper.getCurrentDayOfTheWeek() as ValidSections);
+        const firstSectionKey: ValidSections =  (2 * DateHelper.getCurrentDayOfTheWeek() + 1 as ValidSections);
         const secondSectionKey: ValidSections = (firstSectionKey + 1 as ValidSections);
         //Si aun no se cumple la fecha de la primera seccion
         if(currentDate < firstSectionDate)
