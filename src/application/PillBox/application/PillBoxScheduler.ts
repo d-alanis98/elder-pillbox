@@ -3,26 +3,37 @@ import { schedule } from 'node-cron';
 import DateHelper from '../../Shared/infrastructure/Date/DateHelper';
 import PillBoxLeds, { ValidSections } from '../../Shared/infrastructure/GPiO/components/PillBoxLeds';
 import PillBoxConfiguration from '../domain/PillBox';
-
+import { defaultConfiguration } from './ConfigurationGetter';
+import ConfigurationGetter from './ConfigurationGetter';
+import Logger from '../../Shared/domain/Logger/Logger';
 
 export default class PillBoxScheduler {
+    private readonly logger: Logger;
     private readonly pillBoxLeds: PillBoxLeds;
-    private readonly pillBoxConfiguration: PillBoxConfiguration;
+    private pillBoxConfiguration: PillBoxConfiguration;
 
     constructor(
-        pillBoxLeds: PillBoxLeds,
-        pillBoxConfiguration: PillBoxConfiguration
+        logger: Logger,
+        pillBoxLeds: PillBoxLeds
     ) {
+        this.logger = logger;
         this.pillBoxLeds = pillBoxLeds;
-        this.pillBoxConfiguration = pillBoxConfiguration;
+        this.pillBoxConfiguration = new PillBoxConfiguration(defaultConfiguration);
     }
 
-    public run = () => {
-        
+    public run = async () => {
+        await this.retrievePillBoxConfiguration();
         this.activateSectionIfHourIsPast();
-        schedule('* * * * * ', () => {
+        schedule('* * * * * ', async () => {
+            await this.retrievePillBoxConfiguration();
             this.activateSectionIfHourIsPast();
         })
+    }
+
+    private retrievePillBoxConfiguration = async () => {
+        this.pillBoxConfiguration = await new ConfigurationGetter(
+            this.logger
+        ).run();
     }
 
     private getDatesFromCurrentSections = () => {
