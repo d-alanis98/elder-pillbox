@@ -1,6 +1,7 @@
 
 //Base app
 import App from '../App';
+import PushButton from '../../application/Shared/infrastructure/GPiO/components/PushButton';
 import PillBoxLeds from '../../application/Shared/infrastructure/GPiO/components/PillBoxLeds';
 import PillBoxConfiguration from '../../application/PillBox/domain/PillBox';
 import PillBoxScheduler from '../../application/PillBox/application/PillBoxScheduler';
@@ -20,6 +21,7 @@ export default class PillBoxApp extends App {
                 pillBoxLeds,
                 new PillBoxConfiguration(mockData)
             ).run();
+            new PushButton(6).onPress(() => pillBoxLeds.turnAllOf())
         } catch(error) {
             this.logger.error(error.message);
         }
