@@ -32,10 +32,12 @@ class PillBoxScheduler {
                 return;
             //First section turns on
             if (currentDate >= firstSectionDate && currentDate < secondSectionDate) {
+                console.log('Turning on first section');
                 this.pillBoxLeds.turnAllOf();
                 this.pillBoxLeds.turnOnSection(firstSectionKey);
             }
             if (currentDate >= secondSectionDate) {
+                console.log('Turning on second section');
                 this.pillBoxLeds.turnAllOf();
                 this.pillBoxLeds.turnOnSection(secondSectionKey);
             }
